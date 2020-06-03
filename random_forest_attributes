@@ -1,0 +1,37 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.ensemble import RandomForestRegressor
+    
+
+# Random Forest Attributes
+class random_forest_attributes():
+    
+    def __init__ (self, rf):
+        # constructor requires random forest object
+        self.rf = rf
+        
+    
+    def attributes(self, list_of_vars = None):
+        print(" Base Estimator: ", self.rf.base_estimator_)
+        print("Feature Importances: ", self.rf.feature_importances_)
+        # checking for oob score
+        try:
+            print("OOB Score: ", self.rf.oob_score_)
+        except ValueError:
+            print("OOB score argument was not set to true in RF model")
+            
+    # This method tests optimal estimators based on OOB
+    def test_estimators(X,y, min_est, max_est):
+        oob_list = []
+        est_range = np.arange(min_est, max_est+1)
+        for est in range(min_est, max_est+1):
+            regressor = RandomForestRegressor(n_estimators = est, min_samples_split = 20, oob_score = True)
+            rf = regressor.fit(X,y)
+            oob_list.append(rf.oob_score_)
+            
+        plt.plot(est_range, oob_list)
+        plt.xlabel("Number of Estimators")
+        plt.ylabel("OOB Score")
+        title = "OOB Score vs. Estimators. N_min = ", min_est , ", N_max = ", max_est
+        plt.title(title)
+        return oob_list
