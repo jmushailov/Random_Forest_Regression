@@ -1,0 +1,25 @@
+import os
+from fredapi import Fred
+import pandas as pd
+import time
+
+# FRED method. Setting the API Key as an environmental variable and creating the list
+os.environ['FRED_API_KEY'] = ''
+
+def get_fred(list_for_fred):
+    fred = Fred()
+    merge_df = pd.DataFrame() # Create df to hold all the fred variables
+    counter = 0 # For tracking whether to merge the DF or just overwrite the DF (First pull)
+    for i in list_for_fred:
+        data = fred.get_series(i, observation_start = '2013-01-01', observation_end = '2019-12-01')
+        data = data.reset_index()
+        data.columns = ['date', i]
+        if counter == 0:
+            merge_df = data # If first pull, no variable to merge on, so just overwrite
+        else:
+            merge_df = pd.merge(merge_df, data, on = 'date') # If >1st pull, just merge on date
+        counter += 1
+    time.sleep(1) # Slight delay to not over-query    
+    
+        
+    return merge_df
