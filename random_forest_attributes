@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.ensemble import RandomForestRegressor
     
@@ -35,3 +36,10 @@ class random_forest_attributes():
         title = "OOB Score vs. Estimators. N_min = ", min_est , ", N_max = ", max_est
         plt.title(title)
         return oob_list
+    
+    # This method uses the rf's features and a passed table of col names (since values are passed to RF) to show most important features
+    def feature_importances(self, columns):
+        return pd.DataFrame({"Feature": columns, "Importance": self.rf.feature_importances_}).sort_values(by = 'Importance', ascending = False)
+        
+        
+        
