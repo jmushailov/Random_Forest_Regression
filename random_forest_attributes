@@ -5,7 +5,7 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn import metrics
 
 # Random Forest Attributes
-class random_forest_attributes():
+class rfa():
     
     def __init__ (self, rf):
         # constructor requires random forest object
@@ -44,7 +44,7 @@ class random_forest_attributes():
         return pd.DataFrame({"Feature": columns, "Importance": self.rf.feature_importances_}).sort_values(by = 'Importance', ascending = False)
         
 
-        
+    # This method checks the RMSE over the sample    
     def test_rmse(X,y,X_test,y_test,min_est, max_est):
         rmse_list = []
         est_range = np.arange(min_est, max_est+1) # for plotting
@@ -53,15 +53,20 @@ class random_forest_attributes():
             regressor = RandomForestRegressor(n_estimators = est, min_samples_split = 20, oob_score = True)
             rf = regressor.fit(X,y)
             y_pred = rf.predict(X_test)
-            rmse = metrics.mean_squared_error(y_test, y_pred)
+            rmse = np.sqrt(metrics.mean_squared_error(y_test, y_pred))
             rmse_list.append(rmse)
             
         plt.plot(est_range, rmse_list)
         plt.xlabel("Number of Estimators")
-        plt.ylabel("RMSE Score")
+        plt.ylabel("RMSE")
         title = "RMSE vs. Estimators. N_min = ", min_est , ", N_max = ", max_est
         plt.title(title)
         return rmse_list
 
+    # Basic method to print evaluation scores of a single y test / pred
+    def evaluation(y_test, y_pred):
+        print('Mean Absolute Error:', metrics.mean_absolute_error(y_test, y_pred))
+        print('Mean Squared Error:', metrics.mean_squared_error(y_test, y_pred))
+        print('Root Mean Squared Error:', np.sqrt(metrics.mean_squared_error(y_test, y_pred)))
         
         
