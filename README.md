@@ -1,2 +1,3 @@
-# Random_Forest_Regression
-Template with several classes I made for RF regression. Has a class for diagnostics, data manipulation and soon a financial modelling one.
+# Random_Forest_Regression Template
+Template with several classes I made for RF regression.
+Has a class for diagnostics, data manipulation, FRED integration and soon financial modelling for price optimization.
